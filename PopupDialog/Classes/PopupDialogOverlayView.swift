@@ -24,7 +24,6 @@
 //
 
 import Foundation
-import DynamicBlurView
 
 /// The (blurred) overlay view below the popup dialog
 final public class PopupDialogOverlayView: UIView {
@@ -35,25 +34,6 @@ final public class PopupDialogOverlayView: UIView {
     @objc public dynamic var blurEnabled: Bool {
         get { return !blurView.isHidden }
         set { blurView.isHidden = !newValue }
-    }
-    
-    /// The blur radius of the overlay view
-    @objc public dynamic var blurRadius: CGFloat {
-        get { return blurView.blurRadius }
-        set { blurView.blurRadius = newValue }
-    }
-    
-    /// Whether the blur view should allow for
-    /// live rendering of the background
-    @objc public dynamic var liveBlurEnabled: Bool {
-        get { return blurView.trackingMode == .common }
-        set {
-            if newValue {
-                blurView.trackingMode = .common
-            } else {
-                blurView.trackingMode = .none
-            }
-        }
     }
     
     /// The background color of the overlay view
@@ -70,11 +50,9 @@ final public class PopupDialogOverlayView: UIView {
 
     // MARK: - Views
 
-    internal lazy var blurView: DynamicBlurView = {
-        let blurView = DynamicBlurView(frame: .zero)
-        blurView.blurRadius = 8
-        blurView.trackingMode = .none
-        blurView.isDeepRendering = true
+    internal lazy var blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .light)
+        let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.tintColor = .clear
         blurView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         return blurView
@@ -111,18 +89,4 @@ final public class PopupDialogOverlayView: UIView {
         addSubview(overlay)
     }
 
-}
-
-// MARK: - Deprecated
-
-extension PopupDialogOverlayView {
-    
-    /// Whether the blur view should allow for
-    /// dynamic rendering of the background
-    @available(*, deprecated, message: "liveBlur has been deprecated and will be removed with future versions of PopupDialog. Please use isLiveBlurEnabled instead.")
-    @objc public dynamic var liveBlur: Bool {
-        get { return liveBlurEnabled }
-        set { liveBlurEnabled = newValue }
-    }
-    
 }

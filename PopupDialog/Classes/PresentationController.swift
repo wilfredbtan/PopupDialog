@@ -55,7 +55,6 @@ final internal class PresentationController: UIPresentationController {
         guard let presentedView = presentedView else { return }
 
         presentedView.frame = frameOfPresentedViewInContainerView
-        overlay.blurView.refresh()
     }
 
 }
